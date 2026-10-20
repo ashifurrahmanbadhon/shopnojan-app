@@ -4,8 +4,8 @@ A simple, fast **Bengali income–expense tracker** web app. Track your daily �
 
 ## ✨ Features
 
-- 📊 **Today's summary** — income, expense & balance at a glance
-- 🗂️ **Categories** — organize expenses by category
+- 📊 **Today’s summary** — income, expense & balance at a glance
+- 🗂️ **Organized records** — income & expense entries kept neatly by date
 - 📅 **Daily tracking** — date-wise income & expense records
 - 🇧🇩 **Fully in Bengali** — interface designed for Bangladeshi users
 - 📱 **Mobile-friendly** — responsive design, works on any device
@@ -13,7 +13,7 @@ A simple, fast **Bengali income–expense tracker** web app. Track your daily �
 
 ## 🚀 Usage
 
-Open `index.html` in any modern browser — that's it. No build step, no server required.
+Open `index.html` in any modern browser — that’s it. No build step, no server required.
 
 ## 🛠️ Tech
 
