@@ -42,9 +42,11 @@ main{padding:16px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:var(--pad);box-shadow:0 4px 16px rgba(0,0,0,.28)}
 .metric{display:flex;flex-direction:column;gap:8px}
+#monthly .card.metric{cursor:pointer;transition:border-color .15s,box-shadow .15s}
+#monthly .card.metric.active{border-color:#f7c62f;box-shadow:0 0 0 1px #f7c62f}
 .m-ico{width:37px;height:37px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:17px;background:var(--paper2);border:1px solid var(--line)}
 .label{font-size:10.5px;color:var(--muted);font-weight:800;letter-spacing:.8px;text-transform:uppercase}
-.amount{font-size:22px;font-weight:900}
+.amount{font-size:18px;font-weight:900}
 .income{color:#34d399}.expense{color:#f87171}.balance{color:var(--g2)}
 .section{margin-top:20px}
 .section-title{font-weight:800;color:var(--ink);font-size:16px;display:flex;align-items:center;gap:8px;margin-bottom:12px}
@@ -94,7 +96,7 @@ button:active{transform:scale(.98)}
 .report-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px}
 .report-grid .rg{background:#ffffff14;border:1px solid #ffffff26;border-radius:15px;padding:11px}
 .report-grid .rg b{font-size:10.5px;letter-spacing:.8px;text-transform:uppercase;color:#ffffffb8;display:block;margin-bottom:4px}
-.report-grid .rg span{font-size:18px;font-weight:900}
+.report-grid .rg span{font-size:16px;font-weight:900}
 .bottom{position:fixed;left:0;right:0;bottom:14px;z-index:60;padding:0 14px}
 .nav{max-width:532px;margin:auto;display:flex;justify-content:space-around;background:rgba(13,21,36,.95);backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:24px;box-shadow:0 14px 34px rgba(0,0,0,.5);padding:7px}
 .nav button{background:transparent;color:var(--muted);box-shadow:none;flex:1;padding:7px 2px;font-size:10px;border-radius:17px;font-weight:700;min-height:52px}
@@ -231,9 +233,9 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px #f7c62f26}
  <div class="page-head"><div><h2>Monthly Summary</h2><div id="monthTitle" class="badge"></div></div></div>
  <div class="card"><label>Select Month</label><input id="monthPicker" type="month"></div>
  <div class="grid section">
-  <div class="card metric"><div class="m-ico g">⬆</div><div class="label">Total Income</div><div id="selIncome" class="amount income">৳0</div></div>
-  <div class="card metric"><div class="m-ico r">⬇</div><div class="label">Total Expense</div><div id="selExpense" class="amount expense">৳0</div></div>
-  <div class="card metric"><div class="m-ico o">⚖</div><div class="label">Total Balance</div><div id="selBalance" class="amount balance">৳0</div></div>
+  <div id="mCardIncome" class="card metric" onclick="setMonthlyFilter('income')"><div class="m-ico g">⬆</div><div class="label">Total Income</div><div id="selIncome" class="amount income">৳0</div></div>
+  <div id="mCardExpense" class="card metric" onclick="setMonthlyFilter('expense')"><div class="m-ico r">⬇</div><div class="label">Total Expense</div><div id="selExpense" class="amount expense">৳0</div></div>
+  <div id="mCardBalance" class="card metric active" onclick="setMonthlyFilter('all')"><div class="m-ico o">⚖</div><div class="label">Total Balance</div><div id="selBalance" class="amount balance">৳0</div></div>
  </div>
  <div class="section"><div id="monthlyTable"></div></div>
 </section><section id="report" class="page">
@@ -244,12 +246,11 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px #f7c62f26}
  <h2>Settings</h2>
  <div class="card" style="margin-top:14px">
   <div class="setting"><div><b>Data Backup</b><div class="small">Export all records as JSON</div></div><button onclick="backup()">Backup</button></div>
-  <div class="setting">
+  <div class="setting" style="border-bottom:0">
    <div><b>Data Restore</b><div class="small">Import records from backup JSON file</div></div>
    <button onclick="document.getElementById('fileRestoreInput').click()">Restore</button>
    <input id="fileRestoreInput" type="file" accept=".json,application/json" style="display:none" onchange="restoreFromFile(event)">
   </div>
-  <div class="setting" style="border-bottom:0"><div><b>Clear Data</b><div class="small">Permanently delete all records</div></div><button class="red" onclick="clearData()">Clear</button></div>
  </div>
 
  <div class="dev">
@@ -276,6 +277,7 @@ document.getElementById("logo").src=LOGO_DATA;
 const KEY="swapnojhan_v2";
 let data=JSON.parse(localStorage.getItem(KEY)||"[]");
 let editingId=null;
+let monthlyFilter="all";
 
 function today(){
  const d=new Date();
@@ -364,11 +366,27 @@ function renderToday(){
  todayList.innerHTML=`<div class="tx-list">${list.map(x=>txCard(x,true)).join("")}</div>`;
 }
 
+function setMonthlyFilter(f){
+ monthlyFilter=f;
+ renderMonthly();
+}
+
 function renderMonthly(){
  const m=monthPicker.value||monthNow(),list=data.filter(x=>x.date.slice(0,7)===m),[i,e]=sums(list);
  selIncome.textContent=money(i);selExpense.textContent=money(e);selBalance.textContent=money(i-e);monthTitle.textContent=prettyMonth(m);
- if(!list.length){monthlyTable.innerHTML='<div class="card empty">No records for this month.</div>';return}
- monthlyTable.innerHTML=`<div class="tx-list">${list.slice().sort((a,b)=>b.id-a.id).map(x=>txCard(x,true)).join("")}</div>`;
+ const mCardInc=document.getElementById("mCardIncome"),
+       mCardExp=document.getElementById("mCardExpense"),
+       mCardBal=document.getElementById("mCardBalance");
+ if(mCardInc&&mCardExp&&mCardBal){
+  mCardInc.classList.toggle("active",monthlyFilter==="income");
+  mCardExp.classList.toggle("active",monthlyFilter==="expense");
+  mCardBal.classList.toggle("active",monthlyFilter==="all");
+ }
+ let displayList=list;
+ if(monthlyFilter==="income") displayList=list.filter(x=>x.type==="income");
+ else if(monthlyFilter==="expense") displayList=list.filter(x=>x.type==="expense");
+ if(!displayList.length){monthlyTable.innerHTML='<div class="card empty">No records for this month.</div>';return}
+ monthlyTable.innerHTML=`<div class="tx-list">${displayList.slice().sort((a,b)=>b.id-a.id).map(x=>txCard(x,true)).join("")}</div>`;
 }
 
 function renderReport(){
@@ -394,7 +412,7 @@ entryForm.addEventListener("submit",e=>{
 });
 
 entryDate.addEventListener("change",()=>entryPreview.textContent=entryDate.value?prettyDate(entryDate.value):"");
-monthPicker.addEventListener("change",renderMonthly);
+monthPicker.addEventListener("change",()=>{monthlyFilter="all";renderMonthly();});
 
 function removeEntry(id){
  if(confirm("এই হিসাবটি মুছে ফেলবেন?")){
@@ -441,14 +459,6 @@ function restoreFromFile(e){
  reader.readAsText(file);
 }
 
-function clearData(){
- if(confirm("সব হিসাব স্থায়ীভাবে মুছে ফেলবেন?")){
-  data=[];
-  if(editingId) cancelEdit();
-  save();
- }
-}
-
 document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>{
  document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");
  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
@@ -461,7 +471,7 @@ setInterval(()=>{
  const now=today();
  if(now!==last){
   last=now;entryDate.value=now;entryPreview.textContent=prettyDate(now);
-  todayDate.textContent="Today • "+prettyDate(now);monthPicker.value=monthNow();render();
+  todayDate.textContent="Today • "+prettyDate(now);monthPicker.value=monthNow();monthlyFilter="all";render();
  }
 },30000);
 
