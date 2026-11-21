@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
-<title>স্বপ্নযান — আয়-ব্যয়ের হিসাব</title>
+<title>স্বপ্নযান — Income & Expense</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
@@ -42,11 +42,11 @@ main{padding:16px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:var(--pad);box-shadow:0 4px 16px rgba(0,0,0,.28)}
 .metric{display:flex;flex-direction:column;gap:8px}
-#monthly .card.metric{cursor:pointer;transition:border-color .15s,box-shadow .15s}
+#monthly .card.metric{padding:10px 12px;cursor:pointer;transition:border-color .15s,box-shadow .15s}
 #monthly .card.metric.active{border-color:#f7c62f;box-shadow:0 0 0 1px #f7c62f}
 .m-ico{width:37px;height:37px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:17px;background:var(--paper2);border:1px solid var(--line)}
 .label{font-size:10.5px;color:var(--muted);font-weight:800;letter-spacing:.8px;text-transform:uppercase}
-.amount{font-size:18px;font-weight:900}
+.amount{font-size:16px;font-weight:900}
 .income{color:#34d399}.expense{color:#f87171}.balance{color:var(--g2)}
 .section{margin-top:20px}
 .section-title{font-weight:800;color:var(--ink);font-size:16px;display:flex;align-items:center;gap:8px;margin-bottom:12px}
@@ -94,7 +94,7 @@ button:active{transform:scale(.98)}
 .report-hero{border-radius:calc(var(--radius) + 2px);padding:20px;color:#fff;background:linear-gradient(130deg,#052e22,#065f46 55%,#0369a1);box-shadow:var(--shadow);margin-bottom:14px;border:1px solid #ffffff1f}
 .report-hero h3{margin:0;font-size:19px}
 .report-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px}
-.report-grid .rg{background:#ffffff14;border:1px solid #ffffff26;border-radius:15px;padding:11px}
+.report-grid .rg{background:#ffffff14;border:1px solid #ffffff26;border-radius:15px;padding:8px 11px}
 .report-grid .rg b{font-size:10.5px;letter-spacing:.8px;text-transform:uppercase;color:#ffffffb8;display:block;margin-bottom:4px}
 .report-grid .rg span{font-size:16px;font-weight:900}
 .bottom{position:fixed;left:0;right:0;bottom:14px;z-index:60;padding:0 14px}
@@ -188,24 +188,24 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px #f7c62f26}
 <body><div class="app"><header>
  <div class="header-inner">
   <img class="logo" id="logo" alt="স্বপ্নযান">
-  <div><div class="brand">স্বপ্নযান</div><div class="tag">প্রতিদিনের আয়-ব্যয়ের হিসাব</div></div>
+  <div><div class="brand">স্বপ্নযান</div><div class="tag">Daily Income & Expense</div></div>
  </div>
 </header><main><section id="dashboard" class="page active">
  <div class="book-cover">
-  <div class="book-title">হিসাবের খাতা</div>
-  <div class="h-label">আজকের ব্যালেন্স</div>
+  <div class="book-title">Daily Ledger</div>
+  <div class="h-label">Today's Balance</div>
   <div class="h-balance" id="heroBalance">৳0</div>
   <div class="h-sub" id="heroDate"></div>
   <div class="h-row">
-   <div class="h-chip"><div class="c-label">আজকের আয়</div><div class="c-amt" id="heroIncome">৳0</div></div>
-   <div class="h-chip"><div class="c-label">আজকের খরচ</div><div class="c-amt" id="heroExpense">৳0</div></div>
+   <div class="h-chip"><div class="c-label">Today's Income</div><div class="c-amt" id="heroIncome">৳0</div></div>
+   <div class="h-chip"><div class="c-label">Today's Expense</div><div class="c-amt" id="heroExpense">৳0</div></div>
   </div>
  </div>
  <div class="ledger-box">
-  <div class="ledger-head">এই মাস</div>
-<div class="sum-row"><span>মাসের আয়</span><b id="mIncome" class="income">৳0</b></div><div class="sum-row"><span>মাসের খরচ</span><b id="mExpense" class="expense">৳0</b></div><div class="sum-row"><span>মাসের ব্যালেন্স</span><b id="mBalance" class="balance">৳0</b></div>
-  <div class="ledger-head">সর্বমোট</div>
-<div class="sum-row"><span>মোট আয়</span><b id="oIncome" class="income">৳0</b></div><div class="sum-row"><span>মোট খরচ</span><b id="oExpense" class="expense">৳0</b></div><div class="sum-row"><span>মোট ব্যালেন্স</span><b id="oBalance" class="balance">৳0</b></div>
+  <div class="ledger-head">This Month</div>
+<div class="sum-row"><span>Month's Income</span><b id="mIncome" class="income">৳0</b></div><div class="sum-row"><span>Month's Expense</span><b id="mExpense" class="expense">৳0</b></div><div class="sum-row"><span>Month's Balance</span><b id="mBalance" class="balance">৳0</b></div>
+  <div class="ledger-head">All Time</div>
+<div class="sum-row"><span>Total Income</span><b id="oIncome" class="income">৳0</b></div><div class="sum-row"><span>Total Expense</span><b id="oExpense" class="expense">৳0</b></div><div class="sum-row"><span>Total Balance</span><b id="oBalance" class="balance">৳0</b></div>
   
  </div>
 </section><section id="today" class="page">
@@ -213,8 +213,8 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px #f7c62f26}
  <form id="entryForm">
   <div><label>Type</label>
    <div class="seg">
-    <button type="button" id="segIncome" onclick="setType('income')">⬆ Income · আয়</button>
-    <button type="button" id="segExpense" onclick="setType('expense')">⬇ Expense · খরচ</button>
+    <button type="button" id="segIncome" onclick="setType('income')">⬆ Income</button>
+    <button type="button" id="segExpense" onclick="setType('expense')">⬇ Expense</button>
    </div>
    <select id="type" style="display:none"><option value="income">Income</option><option value="expense">Expense</option></select>
   </div>
@@ -311,11 +311,12 @@ function setType(t){
  document.getElementById("segIncome").className=t==="income"?"on-income":"";
  document.getElementById("segExpense").className=t==="expense"?"on-expense":"";
 }
-function txCard(x,editable){
+function txCard(x,editable,isMonthly){
  const inc=x.type==="income";
  const d=new Date(x.date+"T12:00:00");
  const day=d.getDate(), mon=d.toLocaleDateString("en-GB",{month:"short"}), wk=d.toLocaleDateString("en-US",{weekday:"short"});
- return `<div class="tx ledger-tx"><div class="dateblock"><b>${day}</b><span>${mon}</span></div><div class="tx-main"><div class="tx-note">${esc(x.note)||(inc?"আয়":"খরচ")}</div><div class="tx-date">${wk} • ${inc?"Income · আয়":"Expense · খরচ"}</div></div><div><div class="tx-amt ${inc?"income":"expense"}">${inc?"+":"−"} ${money(x.amount)}</div>${editable?`<div class="tx-btns"><button onclick="editEntry(${x.id})">Edit</button><button class="red" onclick="removeEntry(${x.id})">Delete</button></div>`:""}</div></div>`;
+ const dateLine=isMonthly?`${prettyDate(x.date)} • ${inc?"Income":"Expense"}`:`${wk} • ${inc?"Income":"Expense"}`;
+ return `<div class="tx ledger-tx"><div class="dateblock"><b>${day}</b><span>${mon}</span></div><div class="tx-main"><div class="tx-note">${esc(x.note)||(inc?"Income":"Expense")}</div><div class="tx-date">${dateLine}</div></div><div><div class="tx-amt ${inc?"income":"expense"}">${inc?"+":"−"} ${money(x.amount)}</div>${editable?`<div class="tx-btns"><button onclick="editEntry(${x.id})">Edit</button><button class="red" onclick="removeEntry(${x.id})">Delete</button></div>`:""}</div></div>`;
 }
 function render(){
  const m=monthNow(), td=today();
@@ -325,7 +326,7 @@ function render(){
  oIncome.textContent=money(oi);oExpense.textContent=money(oe);oBalance.textContent=money(oi-oe);
  
  heroBalance.textContent=money(ti-te);heroIncome.textContent=money(ti);heroExpense.textContent=money(te);
- heroDate.textContent=prettyDate(td)+" — আজকের হিসাব এক নজরে";
+ heroDate.textContent=prettyDate(td)+" — Today at a glance";
  renderToday();renderMonthly();renderReport();
 }
 
@@ -363,7 +364,7 @@ function cancelEdit(){
 function renderToday(){
  const list=data.filter(x=>x.date===today()).sort((a,b)=>b.id-a.id);
  if(!list.length){todayList.innerHTML='<div class="card empty">No transactions today.</div>';return}
- todayList.innerHTML=`<div class="tx-list">${list.map(x=>txCard(x,true)).join("")}</div>`;
+ todayList.innerHTML=`<div class="tx-list">${list.map(x=>txCard(x,true,false)).join("")}</div>`;
 }
 
 function setMonthlyFilter(f){
@@ -386,12 +387,12 @@ function renderMonthly(){
  if(monthlyFilter==="income") displayList=list.filter(x=>x.type==="income");
  else if(monthlyFilter==="expense") displayList=list.filter(x=>x.type==="expense");
  if(!displayList.length){monthlyTable.innerHTML='<div class="card empty">No records for this month.</div>';return}
- monthlyTable.innerHTML=`<div class="tx-list">${displayList.slice().sort((a,b)=>b.id-a.id).map(x=>txCard(x,true)).join("")}</div>`;
+ monthlyTable.innerHTML=`<div class="tx-list">${displayList.slice().sort((a,b)=>b.id-a.id).map(x=>txCard(x,true,true)).join("")}</div>`;
 }
 
 function renderReport(){
  const [i,e]=sums(data),list=data.slice().sort((a,b)=>b.id-a.id);
- reportContent.innerHTML=`<div class="report-hero"><h3>স্বপ্নযান — Full Report</h3><p class="small" style="color:#d1fae5">Generated: ${new Date().toLocaleString()}</p><div class="report-grid"><div class="rg"><b>Total Income</b><span>${money(i)}</span></div><div class="rg"><b>Total Expense</b><span>${money(e)}</span></div><div class="rg"><b>Total Balance</b><span>${money(i-e)}</span></div></div></div><div class="section">${list.length?`<div class="tx-list">${list.map(x=>txCard(x,false)).join("")}</div>`:'<div class="card empty">No data available.</div>'}</div>`;
+ reportContent.innerHTML=`<div class="report-hero"><h3>Shopnojan — Full Report</h3><p class="small" style="color:#d1fae5">Generated: ${new Date().toLocaleString()}</p><div class="report-grid"><div class="rg"><b>Total Income</b><span>${money(i)}</span></div><div class="rg"><b>Total Expense</b><span>${money(e)}</span></div><div class="rg"><b>Total Balance</b><span>${money(i-e)}</span></div></div></div><div class="section">${list.length?`<div class="tx-list">${list.map(x=>txCard(x,false)).join("")}</div>`:'<div class="card empty">No data available.</div>'}</div>`;
 }
 
 entryForm.addEventListener("submit",e=>{
@@ -415,7 +416,7 @@ entryDate.addEventListener("change",()=>entryPreview.textContent=entryDate.value
 monthPicker.addEventListener("change",()=>{monthlyFilter="all";renderMonthly();});
 
 function removeEntry(id){
- if(confirm("এই হিসাবটি মুছে ফেলবেন?")){
+ if(confirm("Delete this entry?")){
   data=data.filter(x=>x.id!==id);
   if(editingId===id) cancelEdit();
   save();
@@ -441,18 +442,18 @@ function restoreFromFile(e){
   try{
    const parsed=JSON.parse(evt.target.result);
    if(!isValidBackup(parsed)){
-    alert("অবৈধ ব্যাকআপ ফাইল। ফাইলটিতে প্রয়োজনীয় হিসাবের তথ্য নেই।");
+    alert("Invalid backup file. The file does not contain valid transaction data.");
     e.target.value="";
     return;
    }
-   if(confirm("বর্তমান সব হিসাব মুছে এই ব্যাকআপের হিসাব বসবে। নিশ্চিত?")){
+   if(confirm("This will replace all current data with the backup data. Continue?")){
     data=parsed;
     if(editingId) cancelEdit();
     save();
-    alert("সফলভাবে ব্যাকআপ থেকে সব হিসাব রিস্টোর করা হয়েছে।");
+    alert("Data restored successfully from backup.");
    }
   }catch(err){
-   alert("ফাইলটি পড়া যায়নি বা ফাইলটি সঠিক JSON ফরম্যাটে নেই।");
+   alert("Could not read file or invalid JSON format.");
   }
   e.target.value="";
  };
